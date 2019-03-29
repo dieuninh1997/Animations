@@ -6,24 +6,75 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-type Props = {};
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View, Animated, TouchableOpacity } from 'react-native';
 export default class App extends Component<Props> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      aniScaleBtn1: new Animated.Value(1),
+      opacityBtn1: new Animated.Value(0.6),
+      opacityBtn2: new Animated.Value(0.4),
+      aniScaleBtn2: new Animated.Value(1)
+    }
+  }
+  componentDidMount() {
+    const { aniScaleBtn1, aniScaleBtn2, opacityBtn1, opacityBtn2 } = this.state;
+    Animated.loop(
+      Animated.sequence([
+        Animated.parallel([
+          Animated.timing(aniScaleBtn1, {
+            toValue: 2,
+            duration: 2000,
+          }),
+          Animated.timing(opacityBtn1, {
+            toValue: 0,
+            duration: 2000,
+          }),
+          Animated.timing(aniScaleBtn2, {
+            toValue: 2,
+            delay: 500,
+            duration: 2000,
+          }),
+          Animated.timing(opacityBtn2, {
+            toValue: 0,
+            delay: 500,
+            duration: 2000,
+          })
+        ])
+      ])
+    ).start()
+  }
+
   render() {
+    const { aniScaleBtn1, aniScaleBtn2, opacityBtn1, opacityBtn2 } = this.state;
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        {/*  
+        <View style={[styles.circle]} />
+        <Animated.View
+          style={[styles.circle, {
+            position: 'absolute',
+            opacity: opacityBtn1,
+            transform: [
+              { scale: aniScaleBtn1 }
+            ]
+          }]} />
+
+        <Animated.View
+          style={[styles.circle, {
+            position: 'absolute',
+            opacity: opacityBtn2,
+            transform: [
+              { scale: aniScaleBtn2 }
+            ]
+          }]} />
+          */}
+          <TouchableOpacity onPress={()=>{}}>
+            <Text>Click me</Text>
+          </TouchableOpacity>
+          <View style={{width: 200, height: 200, backgroundColor: 'pink', opacity: 0}}/>
+
       </View>
     );
   }
@@ -32,18 +83,13 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: 'center',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  circle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'blue'
+  }
 });
